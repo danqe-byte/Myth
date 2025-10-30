@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="mythGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9A227" />
+      <stop offset="100%" stop-color="#7A1E24" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="24" fill="#0C0C0F" stroke="url(#mythGradient)" stroke-width="4" />
+  <path d="M40 110 L80 40 L120 110" fill="none" stroke="url(#mythGradient)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="80" cy="88" r="12" fill="url(#mythGradient)" />
+  <text x="80" y="140" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" fill="#e5e7eb">MythCrit</text>
+</svg>
