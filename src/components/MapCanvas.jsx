@@ -63,6 +63,7 @@ const MapCanvas = () => {
 
   const rulerActive = useUIStore((state) => state.rulerActive);
 
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.code === 'Space') {
