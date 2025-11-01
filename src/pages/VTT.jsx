@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Toolbar from '../components/Toolbar.jsx';
 import MapCanvas from '../components/MapCanvas.jsx';
 import SidebarTabs from '../components/SidebarTabs.jsx';
@@ -22,20 +22,13 @@ const VTT = () => {
   const updateScene = useSceneStore((state) => state.updateScene);
   const setActiveTab = useUIStore((state) => state.setActiveTab);
   const toggleHelp = useUIStore((state) => state.toggleHelp);
-  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
-  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 
   useRuler();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       const targetTag = event.target.tagName?.toLowerCase();
-      if (targetTag === 'input' || targetTag === 'textarea' || targetTag === 'select' || event.defaultPrevented) {
-        if (event.key === 'Tab') {
-          return;
-        }
-        return;
-      }
+      if (targetTag === 'input' || targetTag === 'textarea') return;
 
       if (event.key.toLowerCase() === 'g') {
         toggleGrid();
@@ -58,15 +51,11 @@ const VTT = () => {
       if (event.key === '?') {
         toggleHelp();
       }
-      if (event.key === 'Tab') {
-        event.preventDefault();
-        toggleSidebar();
-      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [toggleGrid, toggleFog, exportScene, updateScene, setActiveTab, toggleHelp, toggleSidebar]);
+  }, [toggleGrid, toggleFog, exportScene, updateScene, setActiveTab, toggleHelp]);
 
   useEffect(() => {
     document.body.dataset.uiMode = mode;
@@ -90,31 +79,16 @@ const VTT = () => {
   return (
     <div className="app-shell" data-mode={mode}>
       <Toolbar />
-      <div
-        className="grid-layout"
-        style={
-          mode === 'mobile'
-            ? { gridTemplateColumns: '1fr', height: 'auto' }
-            : sidebarOpen
-              ? undefined
-              : { gridTemplateColumns: '1fr' }
-        }
-      >
-        <AnimatePresence initial={false}>
-          {sidebarOpen && (
-            <motion.aside
-              key="sidebar"
-              className="sidebar"
-              initial={{ x: -40, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -40, opacity: 0 }}
-              transition={{ type: 'spring', damping: 20, stiffness: 200 }}
-            >
-              <SidebarTabs />
-              <div className="sidebar-content">{renderTab()}</div>
-            </motion.aside>
-          )}
-        </AnimatePresence>
+      <div className="grid-layout" style={mode === 'mobile' ? { gridTemplateColumns: '1fr', height: 'auto' } : undefined}>
+        <motion.aside
+          className="sidebar"
+          initial={{ x: -40, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+        >
+          <SidebarTabs />
+          <div className="sidebar-content">{renderTab()}</div>
+        </motion.aside>
         <motion.section
           key="canvas"
           style={{ position: 'relative' }}

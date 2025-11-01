@@ -1,8 +1,12 @@
+
 import { useEffect, useState } from 'react';
+=======
+
 import { Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing.jsx';
 import VTT from './pages/VTT.jsx';
 import HelpModal from './components/HelpModal.jsx';
+
 import Modal from './components/Modal.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 
@@ -31,11 +35,18 @@ const App = () => {
 
   return (
     <ErrorBoundary>
+=======
+
+const App = () => {
+  return (
+    <>
+
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/vtt" element={<VTT />} />
       </Routes>
       <HelpModal />
+
       <Modal isOpen={panicOpen} onClose={() => setPanicOpen(false)} title="Паник-сброс">
         <p style={{ color: 'var(--text-muted)' }}>
           Очистить все сохранения и перезагрузить MythCrit? Это действие необратимо.
@@ -50,6 +61,9 @@ const App = () => {
         </div>
       </Modal>
     </ErrorBoundary>
+=======
+    </>
+
   );
 };
 

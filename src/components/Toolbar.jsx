@@ -11,8 +11,6 @@ const Toolbar = () => {
   const setRulerActive = useUIStore((state) => state.setRulerActive);
   const toggleHelp = useUIStore((state) => state.toggleHelp);
   const rulerActive = useUIStore((state) => state.rulerActive);
-  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
-  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 
   const fileInputRef = useRef(null);
 
@@ -25,11 +23,7 @@ const Toolbar = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      try {
-        setMap(reader.result);
-      } catch (error) {
-        console.error('Не удалось импортировать карту', error);
-      }
+      setMap(reader.result);
     };
     reader.readAsDataURL(file);
   };
@@ -40,16 +34,13 @@ const Toolbar = () => {
 
   return (
     <header className="toolbar">
-      <button onClick={handleMapImportClick} title="Импорт карты">Импорт карты</button>
+      <button onClick={handleMapImportClick}>Импорт карты</button>
       <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMapImport} />
       <button onClick={() => setRulerActive(!rulerActive)}>{rulerActive ? 'Выключить линейку' : 'Линейка'}</button>
       <button onClick={() => toggleSettings()}>Настройки UI</button>
-      <button onClick={resetCamera} title="Сбросить панорамирование и зум">Сброс камеры</button>
+      <button onClick={resetCamera}>Сброс камеры</button>
       <button onClick={toggleHelp}>Справка</button>
-      <button onClick={toggleSidebar} title="Tab — показать/спрятать панель">
-        {sidebarOpen ? 'Скрыть панель' : 'Показать панель'}
-      </button>
-      <div style={{ marginLeft: 'auto', color: 'var(--text-muted)', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+      <div style={{ marginLeft: 'auto', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
         {scene.name} · {scene.tokens.length} токен(ов)
       </div>
       <button onClick={() => setActiveTab('map')}>Открыть панель карты</button>

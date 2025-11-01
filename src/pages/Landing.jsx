@@ -3,23 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useUIStore } from '../store/useUIStore.js';
 import { useSceneStore } from '../store/useSceneStore.js';
-import { useCampaignStore } from '../store/useCampaignStore.js';
 
 const Landing = () => {
   const navigate = useNavigate();
   const mode = useUIStore((state) => state.mode);
   const setMode = useUIStore((state) => state.setMode);
   const toggleHelp = useUIStore((state) => state.toggleHelp);
-  const setScene = useSceneStore((state) => state.setScene);
+  const scene = useSceneStore((state) => state.scene);
   const importScene = useSceneStore((state) => state.importScene);
-
-  const activeCampaignId = useCampaignStore((state) => state.activeCampaignId);
-  const lastSceneId = useCampaignStore((state) => state.lastSceneId);
-  const loadSceneFromCampaign = useCampaignStore((state) => state.loadSceneFromCampaign);
 
   const fileInputRef = useRef(null);
   const [hasSavedScene, setHasSavedScene] = useState(false);
-  const [canContinueCampaign, setCanContinueCampaign] = useState(false);
 
   useEffect(() => {
     document.title = 'MythCrit — мини VTT';
@@ -28,21 +22,14 @@ const Landing = () => {
   }, []);
 
   useEffect(() => {
-    setCanContinueCampaign(Boolean(activeCampaignId && lastSceneId));
-  }, [activeCampaignId, lastSceneId]);
+    if (scene && scene.tokens) {
+      const storedScene = window.localStorage.getItem('mythcrit-scene');
+      setHasSavedScene(Boolean(storedScene));
+    }
+  }, [scene]);
 
   const handleStart = () => navigate('/vtt');
-
-  const handleContinue = () => {
-    if (activeCampaignId && lastSceneId) {
-      const scene = loadSceneFromCampaign(activeCampaignId, lastSceneId);
-      if (scene) {
-        setScene(scene);
-      }
-    }
-    navigate('/vtt');
-  };
-
+  const handleContinue = () => navigate('/vtt');
   const handleOpenScene = () => fileInputRef.current?.click();
 
   const handleImportScene = (event) => {
@@ -83,7 +70,7 @@ const Landing = () => {
           <button className="btn" onClick={handleStart}>
             Начать
           </button>
-          {(hasSavedScene || canContinueCampaign) && (
+          {hasSavedScene && (
             <button className="btn btn-secondary" onClick={handleContinue}>
               Продолжить последнюю сцену
             </button>
